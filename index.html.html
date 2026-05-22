@@ -1,0 +1,674 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>V-TAPER — Estetik Hibrit Program</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#06080f;--s1:#0d1020;--s2:#13172b;
+  --border:#23263e;--red:#f0354b;--orange:#ff7a3d;--gold:#f5c518;
+  --green:#00e676;--cyan:#22d3ee;--purple:#a78bfa;--pink:#f472b6;
+  --text:#eef0fa;--muted:#6b7099;
+}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+html{font-size:16px;}
+body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;min-height:100vh;max-width:600px;margin:0 auto;
+  background-image:radial-gradient(circle at 20% 0%,rgba(34,211,238,.06),transparent 40%),radial-gradient(circle at 85% 8%,rgba(167,139,250,.05),transparent 42%);}
+
+/* HERO */
+.hero{padding:24px 18px 18px;background:linear-gradient(150deg,#06080f 0%,#0a1420 55%,#06080f 100%);border-bottom:1px solid var(--border);position:relative;overflow:hidden;}
+.hero::before{content:'';position:absolute;top:-50px;right:-30px;width:170px;height:170px;background:radial-gradient(circle,rgba(34,211,238,.12),transparent 70%);pointer-events:none;}
+.hero-top{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;position:relative;}
+.hero-pill{display:inline-flex;align-items:center;gap:6px;background:rgba(34,211,238,.1);border:1px solid rgba(34,211,238,.25);padding:4px 12px;border-radius:100px;font-size:10px;font-weight:700;color:var(--cyan);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:10px;}
+.hero h1{font-family:'Bebas Neue',sans-serif;font-size:44px;line-height:.88;letter-spacing:1px;}
+.hero h1 span{background:linear-gradient(90deg,var(--cyan),var(--purple));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;}
+.hero-sub{color:var(--muted);font-size:11px;margin-top:6px;}
+.week-badge{background:var(--s2);border:1px solid var(--border);border-radius:12px;padding:8px 14px;text-align:center;flex-shrink:0;position:relative;}
+.week-badge .wn{font-family:'Bebas Neue',sans-serif;font-size:30px;color:var(--cyan);line-height:1;}
+.week-badge .wl{font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;}
+.week-badge .phase-tag{font-size:9px;font-weight:700;padding:2px 8px;border-radius:100px;margin-top:4px;display:block;}
+.hero-stats{display:flex;gap:7px;margin-top:14px;overflow-x:auto;scrollbar-width:none;position:relative;}
+.hero-stats::-webkit-scrollbar{display:none;}
+.hstat{background:var(--s2);border:1px solid var(--border);border-radius:9px;padding:9px 14px;flex-shrink:0;}
+.hstat .hl{font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;}
+.hstat .hv{font-family:'Bebas Neue',sans-serif;font-size:20px;color:var(--text);}
+
+/* WEEK SELECTOR */
+.week-selector{background:var(--s1);border-bottom:1px solid var(--border);padding:12px 18px;}
+.ws-label{font-size:10px;color:var(--muted);font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-bottom:8px;}
+.ws-row{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;padding-bottom:2px;}
+.ws-row::-webkit-scrollbar{display:none;}
+.wk-btn{flex-shrink:0;width:44px;height:44px;border-radius:10px;border:1px solid var(--border);background:var(--s2);color:var(--muted);font-family:'Bebas Neue',sans-serif;font-size:18px;cursor:pointer;transition:all .15s;display:flex;align-items:center;justify-content:center;}
+.wk-btn.active{background:var(--cyan);border-color:var(--cyan);color:#04121a;}
+.wk-btn.phase2.active{background:var(--purple);border-color:var(--purple);color:#100a1f;}
+.wk-btn.phase3.active{background:var(--green);border-color:var(--green);color:#021a0d;}
+
+/* PHASE BANNER */
+.phase-banner{margin:14px 18px 0;border-radius:11px;padding:12px 16px;display:flex;align-items:center;gap:12px;}
+.phase-banner.p1{background:rgba(34,211,238,.07);border:1px solid rgba(34,211,238,.2);}
+.phase-banner.p2{background:rgba(167,139,250,.07);border:1px solid rgba(167,139,250,.2);}
+.phase-banner.p3{background:rgba(0,230,118,.07);border:1px solid rgba(0,230,118,.2);}
+.pb-icon{font-size:26px;flex-shrink:0;}
+.pb-title{font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:.5px;}
+.p1 .pb-title{color:var(--cyan);}.p2 .pb-title{color:var(--purple);}.p3 .pb-title{color:var(--green);}
+.pb-desc{font-size:11px;color:var(--muted);margin-top:2px;line-height:1.45;}
+
+/* DAY NAV */
+.day-nav{display:flex;overflow-x:auto;scrollbar-width:none;background:var(--s1);border-bottom:1px solid var(--border);margin-top:14px;}
+.day-nav::-webkit-scrollbar{display:none;}
+.day-btn{flex:1;min-width:78px;padding:12px 6px;background:none;border:none;border-bottom:2px solid transparent;color:var(--muted);font-family:'DM Sans',sans-serif;font-size:11px;font-weight:600;cursor:pointer;letter-spacing:.3px;transition:all .2s;white-space:nowrap;text-align:center;}
+.day-btn.active{color:var(--cyan);border-bottom-color:var(--cyan);}
+
+/* PANELS */
+.panel{display:none;padding:0 18px 80px;}
+.panel.active{display:block;}
+.day-head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;padding:18px 0 12px;}
+.day-head h2{font-family:'Bebas Neue',sans-serif;font-size:27px;letter-spacing:1px;line-height:1;margin-bottom:4px;}
+.day-head h2 em{font-style:normal;color:var(--cyan);}
+.day-head p{color:var(--muted);font-size:11px;}
+.day-tags{display:flex;gap:5px;flex-wrap:wrap;margin-top:6px;}
+.dtag{padding:2px 9px;border-radius:100px;font-size:9px;font-weight:700;}
+.dtag-cyan{background:rgba(34,211,238,.12);color:var(--cyan);border:1px solid rgba(34,211,238,.22);}
+.dtag-orange{background:rgba(255,122,61,.12);color:var(--orange);border:1px solid rgba(255,122,61,.22);}
+.dtag-green{background:rgba(0,230,118,.12);color:var(--green);border:1px solid rgba(0,230,118,.22);}
+.dtag-purple{background:rgba(167,139,250,.12);color:var(--purple);border:1px solid rgba(167,139,250,.22);}
+.dtag-red{background:rgba(240,53,75,.12);color:var(--red);border:1px solid rgba(240,53,75,.22);}
+.dtag-pink{background:rgba(244,114,182,.12);color:var(--pink);border:1px solid rgba(244,114,182,.22);}
+.dur-box{background:var(--s2);border:1px solid var(--border);border-radius:10px;padding:10px 14px;text-align:center;flex-shrink:0;}
+.dur-box .db{font-family:'Bebas Neue',sans-serif;font-size:28px;color:var(--gold);display:block;}
+.dur-box .ds{font-size:9px;color:var(--muted);}
+
+.sec-label{font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin:16px 0 8px;display:flex;align-items:center;gap:8px;}
+.sec-label::after{content:'';flex:1;height:1px;background:var(--border);}
+
+.warmup-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:4px;}
+.wi{background:var(--s1);border:1px solid var(--border);border-radius:8px;padding:8px 10px;display:flex;align-items:center;gap:8px;font-size:11px;}
+.wi .icon{font-size:15px;flex-shrink:0;}
+.wi span{font-size:9px;color:var(--muted);display:block;}
+
+/* EXERCISE CARD */
+.ex-list{display:flex;flex-direction:column;gap:8px;}
+.ex-card{background:var(--s1);border:1px solid var(--border);border-radius:12px;overflow:hidden;cursor:pointer;transition:border-color .2s;}
+.ex-card.open{border-color:var(--cyan);}
+.ex-row{display:grid;grid-template-columns:8px 1fr 36px;align-items:stretch;}
+.ex-stripe{width:8px;}
+.stripe-cyan .ex-stripe{background:var(--cyan);}
+.stripe-orange .ex-stripe{background:var(--orange);}
+.stripe-green .ex-stripe{background:var(--green);}
+.stripe-purple .ex-stripe{background:var(--purple);}
+.stripe-red .ex-stripe{background:var(--red);}
+.stripe-pink .ex-stripe{background:var(--pink);}
+.ex-info{padding:11px 12px;}
+.ex-name{font-size:13px;font-weight:600;color:var(--text);margin-bottom:5px;}
+.ex-equip{font-size:9px;color:var(--muted);font-weight:500;margin-bottom:5px;text-transform:uppercase;letter-spacing:.5px;}
+.ex-weight{display:inline-flex;align-items:center;gap:4px;background:rgba(245,197,24,.12);border:1px solid rgba(245,197,24,.25);border-radius:6px;padding:2px 8px;font-size:11px;font-weight:700;color:var(--gold);margin-bottom:5px;}
+.ex-chips{display:flex;gap:4px;flex-wrap:wrap;}
+.chip{background:var(--s2);border:1px solid var(--border);border-radius:4px;padding:2px 7px;font-size:9px;font-weight:500;color:var(--muted);}
+.chip-cyan{background:rgba(34,211,238,.1);color:var(--cyan);border-color:rgba(34,211,238,.2);}
+.chip-orange{background:rgba(255,122,61,.1);color:var(--orange);border-color:rgba(255,122,61,.2);}
+.chip-green{background:rgba(0,230,118,.1);color:var(--green);border-color:rgba(0,230,118,.2);}
+.chip-star{background:rgba(245,197,24,.1);color:var(--gold);border-color:rgba(245,197,24,.2);}
+.ex-chevron{display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:12px;transition:transform .3s;}
+.ex-card.open .ex-chevron{transform:rotate(180deg);}
+.ex-detail{display:none;border-top:1px solid var(--border);background:var(--s2);padding:12px;}
+.ex-card.open .ex-detail{display:block;}
+.detail-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-bottom:10px;}
+.dstat{background:var(--s1);border:1px solid var(--border);border-radius:7px;padding:7px 5px;text-align:center;}
+.dstat .dv{font-family:'Bebas Neue',sans-serif;font-size:17px;color:var(--gold);display:block;line-height:1;}
+.dstat .dl{font-size:8px;color:var(--muted);text-transform:uppercase;letter-spacing:.3px;margin-top:2px;}
+
+.set-logger{margin-bottom:10px;}
+.sl-title{font-size:9px;font-weight:700;color:var(--muted);letter-spacing:1px;text-transform:uppercase;margin-bottom:6px;}
+.sl-rows{display:flex;flex-direction:column;gap:5px;}
+.sl-row{display:grid;grid-template-columns:30px 1fr 1fr 36px;gap:6px;align-items:center;}
+.sl-set{font-family:'Bebas Neue',sans-serif;font-size:16px;color:var(--muted);text-align:center;}
+.sl-input{background:var(--s1);border:1px solid var(--border);border-radius:7px;padding:6px 8px;font-family:'DM Sans',sans-serif;font-size:13px;color:var(--text);text-align:center;width:100%;}
+.sl-input:focus{outline:none;border-color:var(--gold);}
+.sl-input-label{font-size:8px;color:var(--muted);text-align:center;margin-top:2px;}
+.sl-check{width:32px;height:32px;border-radius:7px;border:1px solid var(--border);background:var(--s1);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:14px;transition:all .15s;}
+.sl-check.done{background:var(--green);border-color:var(--green);color:#021a0d;}
+
+.ex-note{background:rgba(34,211,238,.04);border:1px solid rgba(34,211,238,.12);border-left:3px solid var(--cyan);border-radius:0 7px 7px 0;padding:9px 11px;font-size:11px;color:#b8bcd8;line-height:1.55;margin-bottom:8px;}
+.ex-note strong{color:var(--cyan);}
+.ex-note.no{background:rgba(255,122,61,.04);border-color:rgba(255,122,61,.12);border-left-color:var(--orange);}
+.ex-note.no strong{color:var(--orange);}
+.ex-note.ng{background:rgba(0,230,118,.04);border-color:rgba(0,230,118,.12);border-left-color:var(--green);}
+.ex-note.ng strong{color:var(--green);}
+.ex-note.np{background:rgba(167,139,250,.04);border-color:rgba(167,139,250,.12);border-left-color:var(--purple);}
+.ex-note.np strong{color:var(--purple);}
+.ex-note.nr{background:rgba(240,53,75,.04);border-color:rgba(240,53,75,.12);border-left-color:var(--red);}
+.ex-note.nr strong{color:var(--red);}
+.mtags{display:flex;gap:4px;flex-wrap:wrap;}
+.mtag{font-size:9px;padding:2px 7px;border-radius:4px;background:rgba(255,255,255,.04);color:var(--muted);border:1px solid var(--border);}
+.mtag.hl{background:rgba(34,211,238,.1);color:var(--cyan);border-color:rgba(34,211,238,.2);}
+
+/* INFO */
+.info-tabs{display:flex;border-bottom:1px solid var(--border);margin-top:14px;overflow-x:auto;scrollbar-width:none;}
+.info-tabs::-webkit-scrollbar{display:none;}
+.itab{flex:1;min-width:72px;padding:11px 6px;background:none;border:none;border-bottom:2px solid transparent;color:var(--muted);font-family:'DM Sans',sans-serif;font-size:10px;font-weight:700;cursor:pointer;white-space:nowrap;transition:all .2s;letter-spacing:.3px;}
+.itab.active{color:var(--gold);border-bottom-color:var(--gold);}
+.ipanel{display:none;padding-top:14px;}
+.ipanel.active{display:block;}
+.prog-table{background:var(--s1);border:1px solid var(--border);border-radius:10px;overflow:hidden;margin-bottom:12px;}
+.prog-row{display:grid;grid-template-columns:48px 1fr 1fr 1fr;padding:10px 12px;border-bottom:1px solid rgba(35,38,62,.5);font-size:11px;align-items:center;}
+.prog-row:last-child{border-bottom:none;}
+.prog-row.hdr{background:var(--s2);font-size:8px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;font-weight:700;padding:7px 12px;}
+.prog-wk{font-family:'Bebas Neue',sans-serif;font-size:17px;color:var(--cyan);}
+
+.callout{border-radius:0 9px 9px 0;padding:12px;margin-bottom:10px;}
+.callout-title{font-family:'Bebas Neue',sans-serif;font-size:16px;margin-bottom:6px;}
+.callout p{font-size:11px;color:#9498c0;line-height:1.6;}
+.callout.gold{background:var(--s1);border:1px solid var(--border);border-left:3px solid var(--gold);}
+.callout.gold .callout-title{color:var(--gold);}
+.callout.cyan{background:var(--s1);border:1px solid var(--border);border-left:3px solid var(--cyan);}
+.callout.cyan .callout-title{color:var(--cyan);}
+
+.nut-grid{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-bottom:12px;}
+.ncard{background:var(--s2);border:1px solid var(--border);border-radius:10px;padding:11px;text-align:center;}
+.ncard .nv{font-family:'Bebas Neue',sans-serif;font-size:24px;line-height:1;}
+.ncard .nu{font-size:8px;color:var(--muted);}
+.ncard .nn{font-size:8px;color:var(--muted);text-transform:uppercase;letter-spacing:.4px;margin-top:4px;}
+.nc-kcal .nv{color:var(--red);}.nc-prot .nv{color:var(--green);}.nc-carb .nv{color:var(--gold);}.nc-fat .nv{color:var(--orange);}.nc-water .nv{color:var(--cyan);}
+
+.rules-box{background:linear-gradient(135deg,rgba(34,211,238,.04),rgba(167,139,250,.03));border:1px solid rgba(34,211,238,.12);border-radius:12px;padding:14px;}
+.rules-box h3{font-family:'Bebas Neue',sans-serif;font-size:18px;color:var(--cyan);margin-bottom:10px;}
+.rule{display:flex;align-items:flex-start;gap:10px;padding:7px 0;border-bottom:1px solid rgba(35,38,62,.5);font-size:11px;color:#a8accc;line-height:1.5;}
+.rule:last-child{border-bottom:none;padding-bottom:0;}
+.rn{font-family:'Bebas Neue',sans-serif;font-size:18px;color:var(--cyan);flex-shrink:0;width:18px;line-height:1;}
+.rule strong{color:var(--text);}
+.equip-row{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px;}
+.equip-pill{background:var(--s2);border:1px solid var(--border);border-radius:8px;padding:7px 11px;font-size:10px;color:var(--text);font-weight:600;display:flex;align-items:center;gap:5px;}
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-top">
+    <div>
+      <div class="hero-pill">⚡ V-TAPER HYBRID</div>
+      <h1>OMUZ &<br><span>KOL ÖNCELİK</span></h1>
+      <p class="hero-sub">12 Hafta · 4 Gün/Hafta · Upper/Lower/Push/Pull · 175cm · 75kg</p>
+    </div>
+    <div class="week-badge">
+      <div class="wn" id="badge-week">1</div>
+      <div class="wl">Hafta</div>
+      <span class="phase-tag" id="badge-phase" style="background:rgba(34,211,238,.15);color:var(--cyan);">FAZ 1</span>
+    </div>
+  </div>
+  <div class="hero-stats">
+    <div class="hstat"><div class="hl">Hedef</div><div class="hv">V-Taper</div></div>
+    <div class="hstat"><div class="hl">Omuz Set/Hafta</div><div class="hv">~18</div></div>
+    <div class="hstat"><div class="hl">Kol Set/Hafta</div><div class="hv">~16</div></div>
+    <div class="hstat"><div class="hl">Protein</div><div class="hv">155g</div></div>
+  </div>
+</div>
+
+<!-- WEEK SELECTOR -->
+<div class="week-selector">
+  <div class="ws-label">📅 Hafta Seç</div>
+  <div class="ws-row" id="weekBtns"></div>
+</div>
+
+<!-- PHASE BANNER -->
+<div class="phase-banner p1" id="phaseBanner">
+  <div class="pb-icon" id="phaseIcon">🎯</div>
+  <div>
+    <div class="pb-title" id="phaseTitle">FAZ 1 — KALİBRASYON & FORM</div>
+    <div class="pb-desc" id="phaseDesc">Her hareket için doğru ağırlığı bul. Tempo: 3 sn iniş, tam ROM. Trapez ağrısı için presler kontrollü.</div>
+  </div>
+</div>
+
+<!-- DAY NAV -->
+<div class="day-nav">
+  <button class="day-btn active" onclick="switchDay(0)">UPPER<br><span style="font-size:9px;opacity:.6">Gün 1</span></button>
+  <button class="day-btn" onclick="switchDay(1)">LOWER<br><span style="font-size:9px;opacity:.6">Gün 2</span></button>
+  <button class="day-btn" onclick="switchDay(2)">PUSH<br><span style="font-size:9px;opacity:.6">Gün 3</span></button>
+  <button class="day-btn" onclick="switchDay(3)">PULL<br><span style="font-size:9px;opacity:.6">Gün 4</span></button>
+  <button class="day-btn" onclick="switchDay(4)">📈 Plan</button>
+</div>
+
+<!-- ══ UPPER ══ -->
+<div class="panel active" id="p0">
+  <div class="day-head">
+    <div>
+      <h2><em>1</em> — UPPER (TÜM ÜST)</h2>
+      <p>Göğüs · Sırt · Omuz · Kol — dengeli üst vücut</p>
+      <div class="day-tags">
+        <span class="dtag dtag-red">Göğüs</span><span class="dtag dtag-cyan">Sırt</span>
+        <span class="dtag dtag-orange">Omuz</span><span class="dtag dtag-green">Kol</span>
+      </div>
+    </div>
+    <div class="dur-box"><span class="db">70</span><span class="ds">dakika</span></div>
+  </div>
+
+  <div class="sec-label">Isınma (6 dk)</div>
+  <div class="warmup-grid">
+    <div class="wi"><span class="icon">🎯</span><div>Band/cable face pull<span>20 tekrar · omuz ısıt</span></div></div>
+    <div class="wi"><span class="icon">🔄</span><div>Kol çevirme<span>30 sn her yön</span></div></div>
+    <div class="wi"><span class="icon">🏋️</span><div>Boş bar bench<span>15 tekrar</span></div></div>
+    <div class="wi"><span class="icon">🧘</span><div>Skapula retraksiyon<span>15 tekrar</span></div></div>
+  </div>
+
+  <div class="sec-label">Ana Antrenman</div>
+  <div class="ex-list" id="ex-upper"></div>
+</div>
+
+<!-- ══ LOWER ══ -->
+<div class="panel" id="p1">
+  <div class="day-head">
+    <div>
+      <h2><em>2</em> — LOWER (HAFİF KORUMA)</h2>
+      <p>Bacak koruma + core + zayıf nokta omuz/kol</p>
+      <div class="day-tags">
+        <span class="dtag dtag-purple">Bacak</span><span class="dtag dtag-cyan">Core</span>
+        <span class="dtag dtag-orange">Omuz takviye</span>
+      </div>
+    </div>
+    <div class="dur-box"><span class="db">50</span><span class="ds">dakika</span></div>
+  </div>
+
+  <div class="sec-label">Isınma (5 dk)</div>
+  <div class="warmup-grid">
+    <div class="wi"><span class="icon">🦵</span><div>Bodyweight squat<span>15 tekrar</span></div></div>
+    <div class="wi"><span class="icon">🔄</span><div>Glute bridge<span>15 tekrar</span></div></div>
+    <div class="wi"><span class="icon">🧘</span><div>Hip circle<span>10 her yön</span></div></div>
+    <div class="wi"><span class="icon">🦿</span><div>Leg swing<span>10 her bacak</span></div></div>
+  </div>
+
+  <div class="sec-label">Ana Antrenman</div>
+  <div class="ex-list" id="ex-lower"></div>
+</div>
+
+<!-- ══ PUSH ══ -->
+<div class="panel" id="p2">
+  <div class="day-head">
+    <div>
+      <h2><em>3</em> — PUSH (OMUZ ODAK)</h2>
+      <p>Omuz · Göğüs · Triceps — V-taper üst kemer</p>
+      <div class="day-tags">
+        <span class="dtag dtag-orange">Omuz ★</span><span class="dtag dtag-red">Göğüs</span>
+        <span class="dtag dtag-green">Triceps</span>
+      </div>
+    </div>
+    <div class="dur-box"><span class="db">65</span><span class="ds">dakika</span></div>
+  </div>
+
+  <div class="sec-label">Isınma (5 dk)</div>
+  <div class="warmup-grid">
+    <div class="wi"><span class="icon">🤸</span><div>Dinamik omuz stretch<span>1 dk</span></div></div>
+    <div class="wi"><span class="icon">🎯</span><div>Band lateral raise<span>15 tekrar</span></div></div>
+    <div class="wi"><span class="icon">🏋️</span><div>Smith boş bar press<span>12 tekrar</span></div></div>
+    <div class="wi"><span class="icon">🔄</span><div>Cable face pull<span>15 tekrar</span></div></div>
+  </div>
+
+  <div class="sec-label">Ana Antrenman</div>
+  <div class="ex-list" id="ex-push"></div>
+</div>
+
+<!-- ══ PULL ══ -->
+<div class="panel" id="p3">
+  <div class="day-head">
+    <div>
+      <h2><em>4</em> — PULL (SIRT + KOL)</h2>
+      <p>Sırt · Arka Omuz · Biceps — V-taper alt kemer</p>
+      <div class="day-tags">
+        <span class="dtag dtag-cyan">Sırt ★</span><span class="dtag dtag-orange">Arka Omuz</span>
+        <span class="dtag dtag-green">Biceps ★</span>
+      </div>
+    </div>
+    <div class="dur-box"><span class="db">65</span><span class="ds">dakika</span></div>
+  </div>
+
+  <div class="sec-label">Isınma (5 dk)</div>
+  <div class="warmup-grid">
+    <div class="wi"><span class="icon">🎯</span><div>Cable face pull<span>20 tekrar</span></div></div>
+    <div class="wi"><span class="icon">🏋️</span><div>Hafif cable row<span>15 tekrar</span></div></div>
+    <div class="wi"><span class="icon">🔄</span><div>Cat-cow stretch<span>10 tekrar</span></div></div>
+    <div class="wi"><span class="icon">💪</span><div>Hafif curl<span>15 tekrar ısıt</span></div></div>
+  </div>
+
+  <div class="sec-label">Ana Antrenman</div>
+  <div class="ex-list" id="ex-pull"></div>
+</div>
+
+<!-- ══ PLAN ══ -->
+<div class="panel" id="p4">
+  <div class="info-tabs">
+    <button class="itab active" onclick="switchInfo(0,this)">📈 İlerleme</button>
+    <button class="itab" onclick="switchInfo(1,this)">🏋️ Ekipman</button>
+    <button class="itab" onclick="switchInfo(2,this)">🍽️ Beslenme</button>
+    <button class="itab" onclick="switchInfo(3,this)">⚡ Kurallar</button>
+  </div>
+
+  <div class="ipanel active" id="ip0">
+    <div class="callout cyan">
+      <div class="callout-title">📊 V-Taper Hacim Dengesi</div>
+      <p>Bu program omuz (haftada ~18 set) ve kola (~16 set) bilinçli olarak fazla hacim verir. Göğüs/sırt dengeli (~12-14 set). Bacak şu an koruma modunda (~6 set). V-taper = geniş omuz + ince bel illüzyonu.</p>
+    </div>
+    <div class="prog-table" id="progTable"></div>
+    <div class="callout gold">
+      <div class="callout-title">⚙️ Progressive Overload — Double Progression</div>
+      <p>Her hareketin tekrar aralığının ÜST sınırına tüm setlerde ulaşınca → +2.5 kg ekle, alt sınıra dön. Örnek: Bench 4×8-10, tüm setler 10'a ulaştı → +2.5 kg, 8'den başla. Ulaşamadıysan aynı kiloda tekrarı artırmaya çalış.</p>
+    </div>
+  </div>
+
+  <div class="ipanel" id="ip1">
+    <div class="callout cyan">
+      <div class="callout-title">🏋️ Salonundaki Ekipman</div>
+      <p>Bu program YALNIZCA aşağıdaki ekipmanlarla tasarlandı. Hiçbir hareket eksik ekipman gerektirmez.</p>
+    </div>
+    <div class="equip-row">
+      <div class="equip-pill">🔩 Smith Machine</div>
+      <div class="equip-pill">🛋️ Bench Press</div>
+      <div class="equip-pill">🔗 Cable (düz bar)</div>
+      <div class="equip-pill">🦵 Leg Press</div>
+      <div class="equip-pill">💪 Dumbbell'lar</div>
+      <div class="equip-pill">🏋️ Serbest Barbell</div>
+      <div class="equip-pill">⚡ Z-Bar (EZ)</div>
+    </div>
+    <div class="callout gold">
+      <div class="callout-title">⚠️ Eksik Ekipman Çözümleri</div>
+      <p>Pec Deck yok → Cable Fly + Dumbbell Fly. Geniş lat barı yok → düz bar lat pulldown (omuz genişliğinde tutuş, yine de lat çalışır). Leg Extension/Curl makinesi yok → Leg Press + Dumbbell RDL telafi eder.</p>
+    </div>
+  </div>
+
+  <div class="ipanel" id="ip2">
+    <div class="nut-grid">
+      <div class="ncard nc-kcal"><div class="nv">2400</div><div class="nu">kcal/gün</div><div class="nn">Kalori (recomp)</div></div>
+      <div class="ncard nc-prot"><div class="nv">155g</div><div class="nu">gram/gün</div><div class="nn">Protein</div></div>
+      <div class="ncard nc-carb"><div class="nv">250g</div><div class="nu">gram/gün</div><div class="nn">Karbonhidrat</div></div>
+      <div class="ncard nc-fat"><div class="nv">65g</div><div class="nu">gram/gün</div><div class="nn">Yağ</div></div>
+      <div class="ncard nc-water"><div class="nv">3.5L</div><div class="nu">litre/gün</div><div class="nn">Su</div></div>
+    </div>
+    <div class="callout gold">
+      <div class="callout-title">🥩 Protein Kaynakların</div>
+      <p>SEK Protein Süt, Sporcu Tavuklu Pilav, Sporcu Makarna Bowl, Protein Ocean bar & whey. Antrenman sonrası 30-45 dk içinde whey + meyve en kritik öğün. Kreatin 5g/gün her gün (Protein Ocean).</p>
+    </div>
+  </div>
+
+  <div class="ipanel" id="ip3">
+    <div class="rules-box">
+      <h3>⚡ ALTIN KURALLAR</h3>
+      <div class="rule"><div class="rn">1</div><div><strong>Mekanik gerilim &gt; ağırlık.</strong> 3 sn iniş, tam ROM, tükenişe 0-2 tekrar kala bitir. Kilo bir araç, amaç değil.</div></div>
+      <div class="rule"><div class="rn">2</div><div><strong>Trapez ağrısı = form sinyali.</strong> Preslerinde omuzları aşağı-geri sabitle, kürekleri sıkıştır. Ağrı sürerse o hafta yükü %15 düşür.</div></div>
+      <div class="rule"><div class="rn">3</div><div><strong>Face pull asla atlanmaz.</strong> Her Upper, Push, Pull gününde var. Omuz sağlığının ve arka omuz estetiğinin temeli.</div></div>
+      <div class="rule"><div class="rn">4</div><div><strong>Lateral raise = omuz genişliği.</strong> V-taper'ın anahtarı medial deltoid. Hafif tut, tam kontrol, haftada 3x.</div></div>
+      <div class="rule"><div class="rn">5</div><div><strong>Tek programa sadık kal.</strong> 8 hafta bunu uygula, sonra değerlendir. Karışık antrenman = karışık sonuç.</div></div>
+      <div class="rule"><div class="rn">6</div><div><strong>Her seti kaydet.</strong> Kilo + tekrar + RIR. İlerleme grafiği en büyük motivasyon.</div></div>
+      <div class="rule"><div class="rn">7</div><div><strong>12. hafta deload.</strong> Tüm ağırlıkları %50 düşür, aynı hareketler. Vücut toparlanır, sonra yeni döngü.</div></div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ── HAFTALIK AĞIRLIK (12 hafta) — NFL 11. hafta verileri taban alındı ──
+const W = {
+  // PUSH / UPPER göğüs-omuz
+  bb_bench:    ["35","37.5","40","42.5","45","47.5","47.5","50","52.5","55","57.5","deload"],
+  smith_incl:  ["30","32.5","35","37.5","40","42.5","42.5","45","47.5","50","52.5","deload"],
+  db_incl:     ["12","14","14","16","16","18","18","20","20","22","22","deload"],
+  cable_fly:   ["10","10","12","12","14","14","15","15","17","17","18","deload"],
+  pullover:    ["12","14","14","16","16","18","18","20","20","22","22","deload"],
+  // OMUZ
+  smith_ohp:   ["25","27.5","30","30","32.5","32.5","35","35","37.5","37.5","40","deload"],
+  arnold:      ["10","12","12","14","14","15","15","16","16","18","18","deload"],
+  db_lat:      ["6","7","7","8","8","9","9","10","10","11","11","deload"],
+  cable_lat:   ["5","5","6","6","7","7","8","8","9","9","10","deload"],
+  // SIRT
+  lat_pull:    ["40","42.5","45","47.5","50","52.5","55","57.5","60","62.5","65","deload"],
+  bb_row:      ["35","37.5","40","42.5","45","47.5","50","52.5","55","57.5","60","deload"],
+  cable_row:   ["35","37.5","40","42.5","45","47.5","50","52.5","55","57.5","60","deload"],
+  db_row:      ["18","20","22","24","26","28","30","32","34","36","38","deload"],
+  // ARKA OMUZ / FACE
+  facepull:    ["12","12","14","14","15","15","17","17","18","18","20","deload"],
+  rev_fly:     ["7","7","8","8","9","9","10","10","11","11","12","deload"],
+  // TRİCEPS
+  pushdown:    ["14","14","16","16","18","18","20","20","22","22","24","deload"],
+  oh_tri:      ["12","14","14","16","16","18","18","20","20","22","22","deload"],
+  // BİCEPS
+  z_curl:      ["20","20","22.5","22.5","25","25","27.5","27.5","30","30","32.5","deload"],
+  hammer:      ["12","12","14","14","15","15","16","16","18","18","20","deload"],
+  cable_curl:  ["12","14","14","16","16","18","18","20","20","22","22","deload"],
+  incl_curl:   ["8","8","10","10","12","12","14","14","15","15","16","deload"],
+  // BACAK (koruma)
+  leg_press:   ["80","85","90","95","100","105","110","115","120","125","130","deload"],
+  smith_squat: ["40","42.5","45","47.5","50","52.5","55","57.5","60","62.5","65","deload"],
+  db_rdl:      ["20","22","24","26","28","30","32","34","36","38","40","deload"],
+  calf:        ["60","65","70","75","80","85","90","95","100","105","110","deload"],
+  // CORE
+};
+
+// ── EGZERSİZLER ──
+// kg parametresi W[] anahtarı, weightLabel "her el" / "toplam" / "stack" etc.
+const exercises = {
+  upper: [
+    {id:"bb_bench",name:"Barbell Bench Press",equip:"Serbest Barbell + Bench",stripe:"red",sets:4,reps:"8–10",rest:"90 sn",unit:"kg",star:false,
+      note:["nr","<strong>Göğüs ana hareketi.</strong> Kürek kemiklerini sıkıştır, omuzları aşağı-geri sabitle (trapez ağrın için kritik). 3 sn kontrollü indir, alt göğse değdir, güçlü it. Dirsekler 60-70° açıda — tam yana açma."],
+      m:["Pectoralis Major","Anterior Deltoid","Triceps"]},
+    {id:"lat_pull",name:"Lat Pulldown (Düz Bar)",equip:"Cable + düz bar",stripe:"cyan",sets:4,reps:"8–10",rest:"90 sn",unit:"kg",star:true,
+      note:["","<strong>Sırt genişliği — V-taper alt kemer.</strong> Düz bar omuz genişliğinde tutuş. Önce omuzları aşağı çek, dirsekleri cebe koyar gibi göğüs üstüne çek. Tam üstte kollar uzasın (stretch), altta kürek sıkıştır. Geniş bar olmaması sorun değil — lat yine tam çalışır."],
+      m:["Latissimus Dorsi ★","Biceps","Mid Trap"]},
+    {id:"smith_ohp",name:"Smith Machine Shoulder Press",equip:"Smith Machine",stripe:"orange",sets:3,reps:"8–10",rest:"90 sn",unit:"kg",star:true,
+      note:["no","<strong>Omuz ana hareketi ★.</strong> Smith'in sabit yolu omuzu izole eder, stabilizasyon yükü az = trapez daha az devreye girer. Bench'i hafif yatır (75-80°) veya dik otur. Bar çene hizasına insin, tam yukarı it. Beli aşırı kamburlaştırma."],
+      m:["Anterior Deltoid ★","Medial Deltoid","Triceps"]},
+    {id:"db_lat",name:"Dumbbell Lateral Raise",equip:"Dumbbell",stripe:"orange",sets:3,reps:"12–15",rest:"60 sn",unit:"kg",wl:"her el",star:true,
+      note:["no","<strong>Omuz genişliği = V-taper anahtarı ★.</strong> Hafif öne eğil, dirsek hafif bükük, 'su döker gibi' kaldır. Dirsek omuz hizasını geçmesin. Omuzdan değil, yandan kaldır. Trapez devralırsa kilo fazla — düşür. 3 sn kontrollü indir."],
+      m:["Medial Deltoid ★★"]},
+    {id:"cable_row",name:"Seated Cable Row",equip:"Cable",stripe:"cyan",sets:3,reps:"10–12",rest:"75 sn",unit:"kg",star:false,
+      note:["","<strong>Sırt kalınlığı.</strong> Önce omuzları geri çek, sonra dirsekleri göbek hizasına çek. Kürek kemiklerini tam birleştir, 1 sn tut. Gövde dik, sallanma yok. Lat pulldown genişlik, bu kalınlık verir."],
+      m:["Rhomboids","Mid Trapezius","Lats"]},
+    {id:"facepull",name:"Cable Face Pull",equip:"Cable + ip",stripe:"orange",sets:3,reps:"15–20",rest:"60 sn",unit:"kg",star:true,
+      note:["no","<strong>ZORUNLU ★ — omuz sağlığı + arka omuz.</strong> İpi göz hizasına al, yüze çek, sonda elleri dışa döndür (başparmak arkaya). Dirsek omuz hizasında. Hafif tut, bu düzeltici hareket. Trapez ağrını da uzun vadede önler."],
+      m:["Posterior Deltoid ★","External Rotators"]},
+    {id:"z_curl",name:"Z-Bar (EZ) Curl",equip:"Z-Bar",stripe:"green",sets:3,reps:"8–10",rest:"75 sn",unit:"kg",star:false,
+      note:["ng","<strong>Biceps ana hareketi.</strong> Z-bar bileğe bench press'ten daha dostu. Dirsekleri vücuda yapıştır, öne getirme. Tam aşağı uzat (stretch), üstte sıkıştır. 3 sn iniş — büyüme inişte."],
+      m:["Biceps Brachii ★","Brachialis"]},
+    {id:"pushdown",name:"Cable Triceps Pushdown",equip:"Cable + ip",stripe:"green",sets:3,reps:"12–15",rest:"60 sn",unit:"kg",star:false,
+      note:["ng","<strong>Triceps kol kalınlığı.</strong> Dirsekleri gövdeye yapıştır, sadece önkol hareket eder. Altta ipi dışa aç, 1 sn sıkıştır. Kol kalınlığının %60'ı triceps — ihmal etme."],
+      m:["Triceps Lateral Head"]},
+  ],
+  lower: [
+    {id:"leg_press",name:"Leg Press",equip:"Leg Press makinesi",stripe:"purple",sets:3,reps:"12–15",rest:"90 sn",unit:"kg",star:false,
+      note:["np","<strong>Bacak koruma ana hareketi.</strong> Sırt-kalça mindere yapışık. Ayak omuz genişliği. Dizi göğse doğru kontrollü indir, içe çökme. Topuktan it, dizi tam kilitleme. Şu an koruma modunda — aşırı yüklenme yok."],
+      m:["Quadriceps ★","Glutes"]},
+    {id:"db_rdl",name:"Dumbbell RDL",equip:"Dumbbell",stripe:"purple",sets:3,reps:"10–12",rest:"75 sn",unit:"kg",wl:"her el",star:false,
+      note:["np","<strong>Hamstring + glute.</strong> Dumbbell'leri bacak önünde tut, kalçayı geriye it (hip hinge), sırt düz. Hamstring gerilene kadar in, bacağa yakın indir. Kalçayı öne iterek kalk. Sırtı yuvarlama."],
+      m:["Hamstring ★","Glutes ★"]},
+    {id:"smith_squat",name:"Smith Machine Squat",equip:"Smith Machine",stripe:"purple",sets:3,reps:"10–12",rest:"75 sn",unit:"kg",star:false,
+      note:["np","<strong>Quad + glute.</strong> Smith'in sabit yolu denge gerektirmez, bacağa odaklanırsın. Ayaklar hafif önde, dik in. Uyluk paralel veya altı. Dizler ayak yönünde."],
+      m:["Quadriceps","Glutes","Adductors"]},
+    {id:"calf",name:"Leg Press Calf Raise",equip:"Leg Press makinesi",stripe:"purple",sets:4,reps:"15–20",rest:"45 sn",unit:"kg",star:false,
+      note:["np","<strong>Baldır.</strong> Leg press'te ayak ucunu platformun altına koy, sadece ayak bileğiyle it. Tam tepede 1 sn sıkıştır, tam aşağı ger. Baldır inatçıdır, yüksek tekrar + tam ROM gerekir."],
+      m:["Gastrocnemius","Soleus"]},
+    {id:"cable_lat",name:"Cable Lateral Raise (Takviye)",equip:"Cable",stripe:"orange",sets:3,reps:"12–15",rest:"60 sn",unit:"kg",wl:"tek kol",star:true,
+      note:["no","<strong>Omuz ekstra frekans ★.</strong> Bacak günü hafif olduğu için omuza ekstra vurgu ekliyoruz — V-taper önceliğin. Kablo en alttan, vücut önünden geçer. Sabit gerilim avantajı (dumbbell'dan farklı). Hafif tut, tam kontrol."],
+      m:["Medial Deltoid ★★"]},
+    {id:"facepull",name:"Cable Face Pull",equip:"Cable + ip",stripe:"orange",sets:3,reps:"15–20",rest:"60 sn",unit:"kg",star:false,
+      note:["no","<strong>Arka omuz + duruş.</strong> Bacak günü bile face pull yapıyoruz çünkü omuz sağlığı ve arka omuz estetiği için frekans önemli. Hafif, kontrollü, sonda dış rotasyon."],
+      m:["Posterior Deltoid","External Rotators"]},
+    {id:"cable_curl",name:"Cable Crunch",equip:"Cable + ip",stripe:"cyan",sets:3,reps:"15–20",rest:"45 sn",unit:"kg",star:false,
+      note:["","<strong>Core — ince bel için.</strong> Diz üstü çök, ipi şakağa al, kalça sabit, sadece karınla aşağı kıvır. 2 sn sıkıştır. V-taper illüzyonu için sıkı core kritik (büyük göbek değil, kontrollü çalışma)."],
+      m:["Rectus Abdominis ★","Obliques"]},
+  ],
+  push: [
+    {id:"smith_ohp",name:"Smith Machine Shoulder Press",equip:"Smith Machine",stripe:"orange",sets:4,reps:"6–8",rest:"90 sn",unit:"kg",star:true,
+      note:["no","<strong>Omuz ana ★ — Push günü ağır.</strong> Bu gün omuz önceliği, o yüzden 4 set + daha ağır (6-8 tekrar). Smith sabit yol = trapez daha az devrede. Bar çene hizası, tam yukarı. Core ve glute sıkı."],
+      m:["Anterior Deltoid ★","Medial Deltoid","Triceps"]},
+    {id:"smith_incl",name:"Smith Incline Press",equip:"Smith Machine + bench",stripe:"red",sets:3,reps:"8–10",rest:"90 sn",unit:"kg",star:false,
+      note:["nr","<strong>Üst göğüs.</strong> Bench'i 30° yatır. Smith'in sabit yolu üst göğse odaklanmanı sağlar. Bara üst göğse indir, kürekleri sıkıştır, omuzları aşağı tut. Üst göğüs estetik göğüs için kritik."],
+      m:["Üst Pectoralis ★","Anterior Deltoid"]},
+    {id:"db_lat",name:"Dumbbell Lateral Raise",equip:"Dumbbell",stripe:"orange",sets:4,reps:"12–15",rest:"60 sn",unit:"kg",wl:"her el",star:true,
+      note:["no","<strong>Omuz genişliği ★★ — 4 set.</strong> V-taper'ın en önemli hareketi. Push günü omuz öncelikli olduğu için 4 set. Hafif öne eğil, dirsek hafif bük, yandan kaldır, omuz hizasını geçme. Drop set deneyebilirsin son sette."],
+      m:["Medial Deltoid ★★"]},
+    {id:"cable_fly",name:"Cable Fly",equip:"Cable",stripe:"red",sets:3,reps:"12–15",rest:"60 sn",unit:"kg",wl:"her taraf",star:false,
+      note:["nr","<strong>Göğüs izolasyon (pec deck yerine).</strong> Pec deck yok diye cable fly yapıyoruz — aslında daha iyi, sabit gerilim sağlar. Kablolar orta yükseklik, hafif öne eğil, kolları önde birleştir, 1 sn sıkıştır. Stretch'te kontrollü aç."],
+      m:["Pectoralis Major","Inner Chest"]},
+    {id:"arnold",name:"Arnold Press",equip:"Dumbbell",stripe:"orange",sets:3,reps:"10–12",rest:"75 sn",unit:"kg",wl:"her el",star:false,
+      note:["no","<strong>3 deltoid başı.</strong> Avuçlar sana bakar başla, iterken dışa döndür. Rotasyon 3 omuz başını da aktive eder. Yavaş ve kontrollü — rotasyon büyümenin anahtarı."],
+      m:["Anterior Deltoid","Medial Deltoid","Posterior Deltoid"]},
+    {id:"oh_tri",name:"Overhead Triceps Extension",equip:"Dumbbell / Z-Bar",stripe:"green",sets:3,reps:"10–12",rest:"60 sn",unit:"kg",star:false,
+      note:["ng","<strong>Triceps uzun baş.</strong> Dumbbell'i iki elle başın üstünde tut, dirsekler kulak yanında sabit. Başın arkasına indir (uzun baş tam gerilir), yukarı it. Pushdown uzun başı çalıştırmaz — bu tamamlayıcı."],
+      m:["Triceps Long Head ★"]},
+    {id:"facepull",name:"Cable Face Pull",equip:"Cable + ip",stripe:"orange",sets:3,reps:"15–20",rest:"60 sn",unit:"kg",star:true,
+      note:["no","<strong>ZORUNLU ★.</strong> Push günü çok pres var = ön omuz baskın. Face pull arka omzu dengeler, omuz sağlığını korur. Hafif, sonda dış rotasyon."],
+      m:["Posterior Deltoid ★","External Rotators"]},
+  ],
+  pull: [
+    {id:"bb_row",name:"Barbell Bent-Over Row",equip:"Serbest Barbell",stripe:"cyan",sets:4,reps:"8–10",rest:"90 sn",unit:"kg",star:true,
+      note:["","<strong>Sırt kalınlığı ana ★.</strong> Kalçadan eğil (45°), sırt düz, bara göbek-alt göğüs hizasına çek. Dirsekleri geriye, kürekleri sıkıştır. Momentum kullanma. Serbest barbell olduğu için tam compound — sırt yoğunluğu burdan gelir."],
+      m:["Lats ★","Rhomboids","Mid Trap"]},
+    {id:"lat_pull",name:"Lat Pulldown (Düz Bar)",equip:"Cable + düz bar",stripe:"cyan",sets:3,reps:"10–12",rest:"75 sn",unit:"kg",star:true,
+      note:["","<strong>Sırt genişliği ★ — V-taper.</strong> Pull günü ikinci sırt hareketi, genişliğe odak. Omuz genişliği tutuş, omuzları aşağı çek, göğüs üstüne çek. Tam stretch (üstte uzat), altta kürek sıkıştır."],
+      m:["Latissimus Dorsi ★","Biceps"]},
+    {id:"db_row",name:"Dumbbell Single-Arm Row",equip:"Dumbbell + bench",stripe:"cyan",sets:3,reps:"10–12",rest:"60 sn",unit:"kg",wl:"her kol",star:false,
+      note:["","<strong>Tek kol sırt — denge.</strong> Bir diz ve el bench'te, sırt yere paralel düz. Dumbbell'i kalçaya doğru çek, dirsek geriye. Tam stretch (aşağı uzat), tepede sıkıştır. Tek kol asimetriyi düzeltir."],
+      m:["Lats ★","Rhomboids","Rear Delt"]},
+    {id:"rev_fly",name:"Cable Reverse Fly",equip:"Cable",stripe:"orange",sets:3,reps:"15–20",rest:"60 sn",unit:"kg",wl:"her taraf",star:true,
+      note:["no","<strong>Arka omuz ★ — 3D omuz.</strong> Çapraz tutuş (sol kablo sağ el), hafif öne eğil, kolları yana-geriye aç, kürek sıkıştır. Arka omuz V-taper'ı arkadan tamamlar ve omuz yuvarlaklığı verir. Hafif tut."],
+      m:["Posterior Deltoid ★★","Rhomboids"]},
+    {id:"hammer",name:"Dumbbell Hammer Curl",equip:"Dumbbell",stripe:"green",sets:3,reps:"10–12",rest:"60 sn",unit:"kg",wl:"her el",star:true,
+      note:["ng","<strong>Kol kalınlığı ★ — brachialis.</strong> Nötr tutuş (avuç içe), başparmak yukarı. Dirsek sabit. Brachialis kolu kalınlaştırır (biceps altında). Kolun her açıdan dolgun görünmesi buradan. 3 sn iniş."],
+      m:["Brachialis ★★","Biceps","Brachioradialis"]},
+    {id:"incl_curl",name:"Incline Dumbbell Curl",equip:"Dumbbell + bench",stripe:"green",sets:3,reps:"10–12",rest:"60 sn",unit:"kg",wl:"her el",star:true,
+      note:["ng","<strong>Biceps stretch pozisyonu ★.</strong> Bench'i 45-60° yatır, kollar geriye sarkık başla. Bu stretch pozisyonu biceps uzun başını maksimum gerer — stretch-mediated hipertrofi. Kolları geriye bırak, tam stretch'te çalış."],
+      m:["Biceps Long Head ★","Brachialis"]},
+    {id:"cable_curl",name:"Cable Curl",equip:"Cable + bar",stripe:"green",sets:3,reps:"12–15",rest:"60 sn",unit:"kg",star:false,
+      note:["ng","<strong>Biceps finisher — sabit gerilim.</strong> Kablo tüm ROM boyunca sabit gerilim verir (dumbbell altta gerilim kaybeder). Dirsek sabit, tam sıkıştır. Pull gününün son kol hareketi, pompa için ideal."],
+      m:["Biceps Brachii ★"]},
+    {id:"facepull",name:"Cable Face Pull",equip:"Cable + ip",stripe:"orange",sets:2,reps:"15–20",rest:"60 sn",unit:"kg",star:false,
+      note:["no","<strong>Arka omuz + duruş kapanış.</strong> Haftanın 4. face pull günü. Omuz sağlığı için frekans. Hafif, kontrollü, sonda dış rotasyon. Bu kadar face pull = bilet sağlıklı omuzlar."],
+      m:["Posterior Deltoid","External Rotators"]},
+  ],
+};
+
+const phaseData = {
+  1:{cls:'p1',icon:'🎯',title:'FAZ 1 — KALİBRASYON & FORM',desc:'Doğru ağırlığı bul. 3 sn iniş, tam ROM. Presler kontrollü (trapez).',pn:'FAZ 1',pc:'var(--cyan)',pb:'rgba(34,211,238,.15)'},
+  2:{cls:'p1',icon:'🎯',title:'FAZ 1 — FORM OTURUYOR',desc:'Hareketler tanıdık. Mekanik gerilime odaklan, tükenişe yaklaş.',pn:'FAZ 1',pc:'var(--cyan)',pb:'rgba(34,211,238,.15)'},
+  3:{cls:'p1',icon:'🎯',title:'FAZ 1 — SON HAFTALAR',desc:'Çift ilerleme başlıyor. Üst tekrara ulaşınca +2.5 kg.',pn:'FAZ 1',pc:'var(--cyan)',pb:'rgba(34,211,238,.15)'},
+  4:{cls:'p1',icon:'🎯',title:'FAZ 1 — TAMAMLANIYOR',desc:'Faz 2 yaklaşıyor. Omuz/kol hacmi meyvesini vermeye başlar.',pn:'FAZ 1',pc:'var(--cyan)',pb:'rgba(34,211,238,.15)'},
+  5:{cls:'p2',icon:'🔥',title:'FAZ 2 — HACİM & YOĞUNLUK',desc:'İlk görsel değişim. Omuz genişliği fark edilir hale gelir.',pn:'FAZ 2',pc:'var(--purple)',pb:'rgba(167,139,250,.15)'},
+  6:{cls:'p2',icon:'🔥',title:'FAZ 2 — HACİM & YOĞUNLUK',desc:'Ayna testi dönemi. Beslenme ve uyku şimdi kritik.',pn:'FAZ 2',pc:'var(--purple)',pb:'rgba(167,139,250,.15)'},
+  7:{cls:'p2',icon:'🔥',title:'FAZ 2 — GÜÇ + HACİM',desc:'En zorlu dönem. Her sette form korunmalı, ego bırak.',pn:'FAZ 2',pc:'var(--purple)',pb:'rgba(167,139,250,.15)'},
+  8:{cls:'p2',icon:'🔥',title:'FAZ 2 — SON HAFTA',desc:'Vücut tamamen adapte. V-taper şekillenmeye başladı.',pn:'FAZ 2',pc:'var(--purple)',pb:'rgba(167,139,250,.15)'},
+  9:{cls:'p3',icon:'💎',title:'FAZ 3 — ESTETİK ZİRVE',desc:'Omuz-bel oranı belirginleşiyor. Kollar dolgunlaştı.',pn:'FAZ 3',pc:'var(--green)',pb:'rgba(0,230,118,.15)'},
+  10:{cls:'p3',icon:'💎',title:'FAZ 3 — BİLEŞİK BÜYÜME',desc:'Bütün ölçüler arttı. Fotoğraf karşılaştırması yap.',pn:'FAZ 3',pc:'var(--green)',pb:'rgba(0,230,118,.15)'},
+  11:{cls:'p3',icon:'💎',title:'FAZ 3 — SON HAMLE',desc:'Son zorlu hafta. Kendini zorla ama formdan taviz verme.',pn:'FAZ 3',pc:'var(--green)',pb:'rgba(0,230,118,.15)'},
+  12:{cls:'p3',icon:'🏆',title:'FAZ 3 — DELOAD HAFTASI',desc:'Tüm ağırlıkları %50 düşür. Vücut toparlanır. Yeni döngüye hazırlan!',pn:'FAZ 3',pc:'var(--green)',pb:'rgba(0,230,118,.15)'},
+};
+
+let currentWeek = 1;
+
+function buildWeekButtons(){
+  const c=document.getElementById('weekBtns');
+  for(let w=1;w<=12;w++){
+    const b=document.createElement('button');
+    b.className='wk-btn'+(w<=4?' phase1':w<=8?' phase2':' phase3')+(w===1?' active':'');
+    b.textContent=w;b.onclick=()=>selectWeek(w);c.appendChild(b);
+  }
+}
+function selectWeek(w){currentWeek=w;document.querySelectorAll('.wk-btn').forEach((b,i)=>b.classList.toggle('active',i===w-1));updateWeekUI();renderAll();}
+
+function updateWeekUI(){
+  const w=currentWeek,pd=phaseData[w];
+  document.getElementById('badge-week').textContent=w;
+  const pt=document.getElementById('badge-phase');pt.textContent=pd.pn;pt.style.background=pd.pb;pt.style.color=pd.pc;
+  const pb=document.getElementById('phaseBanner');pb.className='phase-banner '+pd.cls;
+  document.getElementById('phaseIcon').textContent=pd.icon;
+  document.getElementById('phaseTitle').textContent=pd.title;
+  document.getElementById('phaseDesc').textContent=pd.desc;
+}
+
+function weightLabel(ex){
+  const arr=W[ex.id];if(!arr)return '—';
+  const v=arr[currentWeek-1];
+  if(v==='deload')return 'DELOAD %50';
+  const suffix=ex.wl?(' '+ex.wl):'';
+  return v+' '+ex.unit+suffix;
+}
+
+function renderDay(key,containerId){
+  const cont=document.getElementById(containerId);
+  cont.innerHTML='';
+  exercises[key].forEach((ex,idx)=>{
+    const numSets=ex.sets;
+    let logRows='';
+    for(let s=1;s<=numSets;s++){
+      logRows+=`<div class="sl-row"><div class="sl-set">${s}</div>
+        <div><input class="sl-input" type="number" placeholder="kg" inputmode="decimal" onclick="event.stopPropagation()" onfocus="event.stopPropagation()" ontouchstart="event.stopPropagation()"><div class="sl-input-label">Kilo</div></div>
+        <div><input class="sl-input" type="number" placeholder="rep" inputmode="numeric" onclick="event.stopPropagation()" onfocus="event.stopPropagation()" ontouchstart="event.stopPropagation()"><div class="sl-input-label">Tekrar</div></div>
+        <button class="sl-check" onclick="event.stopPropagation();toggleCheck(this)">○</button></div>`;
+    }
+    const noteCls=ex.note[0]?('ex-note '+ex.note[0]):'ex-note';
+    const chips=`<span class="chip chip-${ex.stripe==='red'?'orange':ex.stripe==='purple'?'cyan':ex.stripe}">${ex.sets} Set</span>
+      <span class="chip">${ex.reps}</span><span class="chip">${ex.rest}</span>${ex.star?'<span class="chip chip-star">★ Öncelik</span>':''}`;
+    const mtags=ex.m.map((m,i)=>`<span class="mtag${i===0?' hl':''}">${m}</span>`).join('');
+    const card=document.createElement('div');
+    card.className='ex-card stripe-'+ex.stripe;
+    card.innerHTML=`<div class="ex-row" onclick="this.closest('.ex-card').classList.toggle('open')">
+      <div class="ex-stripe"></div>
+      <div class="ex-info">
+        <div class="ex-equip">${ex.equip}</div>
+        <div class="ex-name">${ex.name}</div>
+        <div class="ex-weight">⚖️ ${weightLabel(ex)}</div>
+        <div class="ex-chips">${chips}</div>
+      </div>
+      <div class="ex-chevron">▼</div>
+    </div>
+    <div class="ex-detail" onclick="event.stopPropagation()">
+      <div class="detail-stats">
+        <div class="dstat"><span class="dv">${ex.sets}</span><span class="dl">Set</span></div>
+        <div class="dstat"><span class="dv">${ex.reps}</span><span class="dl">Tekrar</span></div>
+        <div class="dstat"><span class="dv">${ex.rest.replace(' sn','')}sn</span><span class="dl">Dinlenme</span></div>
+        <div class="dstat"><span class="dv" style="font-size:13px">${weightLabel(ex).replace(' kg','')}</span><span class="dl">Ağırlık</span></div>
+      </div>
+      <div class="set-logger"><div class="sl-title">Set Takibi</div><div class="sl-rows">${logRows}</div></div>
+      <div class="${noteCls}">${ex.note[1]}</div>
+      <div class="mtags">${mtags}</div>
+    </div>`;
+    cont.appendChild(card);
+  });
+}
+
+function renderAll(){
+  renderDay('upper','ex-upper');
+  renderDay('lower','ex-lower');
+  renderDay('push','ex-push');
+  renderDay('pull','ex-pull');
+}
+
+function toggleCheck(btn){btn.classList.toggle('done');btn.textContent=btn.classList.contains('done')?'✓':'○';}
+function switchDay(i){document.querySelectorAll('.panel').forEach((p,j)=>p.classList.toggle('active',i===j));document.querySelectorAll('.day-btn').forEach((b,j)=>b.classList.toggle('active',i===j));window.scrollTo({top:0,behavior:'smooth'});}
+function switchInfo(i,btn){document.querySelectorAll('.ipanel').forEach((p,j)=>p.classList.toggle('active',i===j));document.querySelectorAll('.itab').forEach(b=>b.classList.remove('active'));btn.classList.add('active');}
+
+function buildProgressTable(){
+  const t=document.getElementById('progTable');
+  const rows=[
+    ['HAFTA','BENCH','SMITH OHP','BB ROW'],
+    ['1–2','35-37.5','25-27.5','35-37.5'],
+    ['3–4','40-42.5','30','40-42.5'],
+    ['5–6','45-47.5','32.5','45-47.5'],
+    ['7–8','47.5-50','35','50-52.5'],
+    ['9–10','52.5-55','37.5','55-57.5'],
+    ['11','57.5','40','60'],
+    ['12','DELOAD','DELOAD','DELOAD'],
+  ];
+  rows.forEach((r,ri)=>{
+    const d=document.createElement('div');
+    d.className='prog-row'+(ri===0?' hdr':'');
+    d.innerHTML=r.map((c,ci)=>`<div class="${ci===0&&ri>0?'prog-wk':''}">${c}</div>`).join('');
+    t.appendChild(d);
+  });
+}
+
+document.addEventListener('DOMContentLoaded',()=>{
+  buildWeekButtons();
+  updateWeekUI();
+  renderAll();
+  buildProgressTable();
+});
+</script>
+</body>
+</html>
