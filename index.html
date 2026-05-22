@@ -188,8 +188,8 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;min
 <div class="hero">
   <div class="hero-top">
     <div>
-      <div class="hero-pill">⚡ V-TAPER HYBRID</div>
-      <h1>OMUZ &<br><span>KOL ÖNCELİK</span></h1>
+      <div class="hero-pill">⚡ NFL ESTETİK HYBRID</div>
+      <h1>TOPLU &<br><span>ESTETİK GÜÇ</span></h1>
       <p class="hero-sub">12 Hafta · 4 Gün/Hafta · Upper/Lower/Push/Pull · 175cm · 75kg</p>
     </div>
     <div class="week-badge">
@@ -199,9 +199,10 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;min
     </div>
   </div>
   <div class="hero-stats">
-    <div class="hstat"><div class="hl">Hedef</div><div class="hv">V-Taper</div></div>
-    <div class="hstat"><div class="hl">Omuz Set/Hafta</div><div class="hv">~18</div></div>
-    <div class="hstat"><div class="hl">Kol Set/Hafta</div><div class="hv">~16</div></div>
+    <div class="hstat"><div class="hl">Hedef</div><div class="hv">NFL Estetik</div></div>
+    <div class="hstat"><div class="hl">Omuz Set</div><div class="hv">~18</div></div>
+    <div class="hstat"><div class="hl">Göğüs Set</div><div class="hv">~16</div></div>
+    <div class="hstat"><div class="hl">Kol Set</div><div class="hv">~21</div></div>
     <div class="hstat"><div class="hl">Protein</div><div class="hv">155g</div></div>
   </div>
 </div>
@@ -345,8 +346,8 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;min
 
   <div class="ipanel active" id="ip0">
     <div class="callout cyan">
-      <div class="callout-title">📊 V-Taper Hacim Dengesi</div>
-      <p>Bu program omuz (haftada ~18 set) ve kola (~16 set) bilinçli olarak fazla hacim verir. Göğüs/sırt dengeli (~12-14 set). Bacak şu an koruma modunda (~6 set). V-taper = geniş omuz + ince bel illüzyonu.</p>
+      <div class="callout-title">📊 NFL Estetik Hacim Dengesi</div>
+      <p>Toplu ve dengeli bir fizik için tüm üst vücut güçlü hacimde: omuz ~18, göğüs ~16, kol ~21 (biceps 12 + triceps 9 doğrudan, ~20 dolaylı). Sırt ~13. Hiçbir bölge eksik kalmaz. Bacak şu an koruma modunda (~6). NFL estetiği = geniş omuz + dolgun göğüs + kalın kol + güçlü duruş.</p>
     </div>
     <div class="prog-table" id="progTable"></div>
     <div class="callout gold">
@@ -410,6 +411,7 @@ const W = {
   bb_bench:    ["35","37.5","40","42.5","45","47.5","47.5","50","52.5","55","57.5","deload"],
   smith_incl:  ["30","32.5","35","37.5","40","42.5","42.5","45","47.5","50","52.5","deload"],
   db_incl:     ["12","14","14","16","16","18","18","20","20","22","22","deload"],
+  db_bench_flat:["14","16","16","18","18","20","20","22","22","24","24","deload"],
   cable_fly:   ["10","10","12","12","14","14","15","15","17","17","18","deload"],
   pullover:    ["12","14","14","16","16","18","18","20","20","22","22","deload"],
   // OMUZ
@@ -428,6 +430,7 @@ const W = {
   // TRİCEPS
   pushdown:    ["14","14","16","16","18","18","20","20","22","22","24","deload"],
   oh_tri:      ["12","14","14","16","16","18","18","20","20","22","22","deload"],
+  cable_oh_tri:["12","12","14","14","16","16","18","18","20","20","22","deload"],
   // BİCEPS
   z_curl:      ["20","20","22.5","22.5","25","25","27.5","27.5","30","30","32.5","deload"],
   hammer:      ["12","12","14","14","15","15","16","16","18","18","20","deload"],
@@ -448,6 +451,9 @@ const exercises = {
     {id:"bb_bench",name:"Barbell Bench Press",equip:"Serbest Barbell + Bench",stripe:"red",sets:4,reps:"8–10",rest:"90 sn",unit:"kg",star:false,
       note:["nr","<strong>Göğüs ana hareketi.</strong> Kürek kemiklerini sıkıştır, omuzları aşağı-geri sabitle (trapez ağrın için kritik). 3 sn kontrollü indir, alt göğse değdir, güçlü it. Dirsekler 60-70° açıda — tam yana açma."],
       m:["Pectoralis Major","Anterior Deltoid","Triceps"]},
+    {id:"db_incl",name:"Dumbbell Incline Press 30°",equip:"Dumbbell + bench",stripe:"red",sets:3,reps:"10–12",rest:"75 sn",unit:"kg",wl:"her el",star:false,
+      note:["nr","<strong>Üst göğüs takviye.</strong> Bench'i 30° yatır. Bench Press'in üstüne üst göğüs ekliyoruz — toplu göğüs için kritik. Dumbbell'leri göğüs üstüne kontrollü indir, gerilimi üst göğüste hisset, iterken hafif birbirine yaklaştır. NFL göğsü dolgunluğu burdan."],
+      m:["Üst Pectoralis ★","Anterior Deltoid"]},
     {id:"lat_pull",name:"Lat Pulldown (Düz Bar)",equip:"Cable + düz bar",stripe:"cyan",sets:4,reps:"8–10",rest:"90 sn",unit:"kg",star:true,
       note:["","<strong>Sırt genişliği — V-taper alt kemer.</strong> Düz bar omuz genişliğinde tutuş. Önce omuzları aşağı çek, dirsekleri cebe koyar gibi göğüs üstüne çek. Tam üstte kollar uzasın (stretch), altta kürek sıkıştır. Geniş bar olmaması sorun değil — lat yine tam çalışır."],
       m:["Latissimus Dorsi ★","Biceps","Mid Trap"]},
@@ -469,6 +475,9 @@ const exercises = {
     {id:"pushdown",name:"Cable Triceps Pushdown",equip:"Cable + ip",stripe:"green",sets:3,reps:"12–15",rest:"60 sn",unit:"kg",star:false,
       note:["ng","<strong>Triceps kol kalınlığı.</strong> Dirsekleri gövdeye yapıştır, sadece önkol hareket eder. Altta ipi dışa aç, 1 sn sıkıştır. Kol kalınlığının %60'ı triceps — ihmal etme."],
       m:["Triceps Lateral Head"]},
+    {id:"cable_oh_tri",name:"Cable Overhead Triceps Ext.",equip:"Cable + ip",stripe:"green",sets:3,reps:"10–12",rest:"60 sn",unit:"kg",star:false,
+      note:["ng","<strong>Triceps uzun baş — kol kalınlığı ★.</strong> Kabloya sırtını dön, ipi başın üstünden tut, öne doğru it. Dirsekler kulak yanında sabit. Uzun baş sadece bu overhead pozisyonda tam çalışır — pushdown'ı tamamlar. Toplu kol için şart."],
+      m:["Triceps Long Head ★"]},
   ],
   lower: [
     {id:"leg_press",name:"Leg Press",equip:"Leg Press makinesi",stripe:"purple",sets:3,reps:"12–15",rest:"90 sn",unit:"kg",star:false,
@@ -500,6 +509,9 @@ const exercises = {
     {id:"smith_incl",name:"Smith Incline Press",equip:"Smith Machine + bench",stripe:"red",sets:3,reps:"8–10",rest:"90 sn",unit:"kg",star:false,
       note:["nr","<strong>Üst göğüs.</strong> Bench'i 30° yatır. Smith'in sabit yolu üst göğse odaklanmanı sağlar. Bara üst göğse indir, kürekleri sıkıştır, omuzları aşağı tut. Üst göğüs estetik göğüs için kritik."],
       m:["Üst Pectoralis ★","Anterior Deltoid"]},
+    {id:"db_bench_flat",name:"Flat Dumbbell Press",equip:"Dumbbell + bench",stripe:"red",sets:3,reps:"10–12",rest:"75 sn",unit:"kg",wl:"her el",star:false,
+      note:["nr","<strong>Göğüs orta-alt dolgunluk.</strong> Düz bench, dumbbell'ler göğüs hizası. Barbell'den farklı olarak daha derin stretch ve bağımsız kol hareketi sağlar — göğüs daha tam çalışır. Üst göğüs (incline) + orta-alt (bu) = toplu göğüs. İterken hafif birbirine yaklaştır."],
+      m:["Pectoralis Major ★","Anterior Deltoid","Triceps"]},
     {id:"db_lat",name:"Dumbbell Lateral Raise",equip:"Dumbbell",stripe:"orange",sets:4,reps:"12–15",rest:"60 sn",unit:"kg",wl:"her el",star:true,
       note:["no","<strong>Omuz genişliği ★★ — 4 set.</strong> V-taper'ın en önemli hareketi. Push günü omuz öncelikli olduğu için 4 set. Hafif öne eğil, dirsek hafif bük, yandan kaldır, omuz hizasını geçme. Drop set deneyebilirsin son sette."],
       m:["Medial Deltoid ★★"]},
