@@ -127,6 +127,7 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;min
 .sl-input{background:var(--s1);border:1px solid var(--border);border-radius:7px;padding:6px 8px;font-family:'DM Sans',sans-serif;font-size:13px;color:var(--text);text-align:center;width:100%;}
 .sl-input:focus{outline:none;border-color:var(--gold);}
 .sl-input-label{font-size:8px;color:var(--muted);text-align:center;margin-top:2px;}
+.prev-box{background:rgba(245,197,24,.06);border:1px solid rgba(245,197,24,.18);border-radius:7px;padding:7px 10px;font-size:10px;color:var(--gold);margin-bottom:10px;line-height:1.4;}
 .sl-check{width:32px;height:32px;border-radius:7px;border:1px solid var(--border);background:var(--s1);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:14px;transition:all .15s;}
 .sl-check.done{background:var(--green);border-color:var(--green);color:#021a0d;}
 
@@ -401,6 +402,13 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;min
       <div class="rule"><div class="rn">6</div><div><strong>Her seti kaydet.</strong> Kilo + tekrar + RIR. İlerleme grafiği en büyük motivasyon.</div></div>
       <div class="rule"><div class="rn">7</div><div><strong>12. hafta deload.</strong> Tüm ağırlıkları %50 düşür, aynı hareketler. Vücut toparlanır, sonra yeni döngü.</div></div>
     </div>
+    <div class="callout gold" style="margin-top:12px;">
+      <div class="callout-title">💾 Kayıtların</div>
+      <p>Girdiğin tüm kilo ve tekrarlar telefonun hafızasında otomatik saklanır — sayfayı kapatsan bile kaybolmaz. Her hafta ayrı tutulur, geçen kaydını sana gösterir.</p>
+      <p style="margin-top:8px;color:var(--muted);font-size:10px;">⚠️ Not: Veriler bu cihaza ve bu tarayıcıya özeldir. Tarayıcı geçmişini/verilerini temizlersen silinir. Başka telefonda görünmez.</p>
+      <button onclick="exportData()" style="margin-top:10px;background:var(--s2);border:1px solid var(--cyan);color:var(--cyan);border-radius:8px;padding:9px 14px;font-family:'DM Sans',sans-serif;font-weight:600;font-size:11px;cursor:pointer;">📤 Kayıtları Yedekle (kopyala)</button>
+      <button onclick="clearWeekData()" style="margin-top:10px;margin-left:6px;background:var(--s2);border:1px solid var(--red);color:var(--red);border-radius:8px;padding:9px 14px;font-family:'DM Sans',sans-serif;font-weight:600;font-size:11px;cursor:pointer;">🗑️ Bu Haftayı Temizle</button>
+    </div>
   </div>
 </div>
 
@@ -608,15 +616,27 @@ function renderDay(key,containerId){
     const numSets=ex.sets;
     let logRows='';
     for(let s=1;s<=numSets;s++){
+      const baseKey=`w${currentWeek}_${key}_${ex.id}_s${s}`;
+      const kgKey=baseKey+'_kg';
+      const repKey=baseKey+'_rep';
+      const chkKey=baseKey+'_chk';
+      const kgVal=loadVal(kgKey);
+      const repVal=loadVal(repKey);
+      const isChecked=loadVal(chkKey)==='1';
+      // geçen hafta aynı set verisi (hint)
+      const prevHint=getPrevHint(key,ex.id,s);
       logRows+=`<div class="sl-row"><div class="sl-set">${s}</div>
-        <div><input class="sl-input" type="number" placeholder="kg" inputmode="decimal" onclick="event.stopPropagation()" onfocus="event.stopPropagation()" ontouchstart="event.stopPropagation()"><div class="sl-input-label">Kilo</div></div>
-        <div><input class="sl-input" type="number" placeholder="rep" inputmode="numeric" onclick="event.stopPropagation()" onfocus="event.stopPropagation()" ontouchstart="event.stopPropagation()"><div class="sl-input-label">Tekrar</div></div>
-        <button class="sl-check" onclick="event.stopPropagation();toggleCheck(this)">○</button></div>`;
+        <div><input class="sl-input" type="number" placeholder="${prevHint.kg||'kg'}" inputmode="decimal" value="${kgVal}" data-save="${kgKey}" onchange="saveVal(this)" oninput="saveVal(this)" onclick="event.stopPropagation()" onfocus="event.stopPropagation()" ontouchstart="event.stopPropagation()"><div class="sl-input-label">Kilo</div></div>
+        <div><input class="sl-input" type="number" placeholder="${prevHint.rep||'rep'}" inputmode="numeric" value="${repVal}" data-save="${repKey}" onchange="saveVal(this)" oninput="saveVal(this)" onclick="event.stopPropagation()" onfocus="event.stopPropagation()" ontouchstart="event.stopPropagation()"><div class="sl-input-label">Tekrar</div></div>
+        <button class="sl-check${isChecked?' done':''}" data-chk="${chkKey}" onclick="event.stopPropagation();toggleCheck(this)">${isChecked?'✓':'○'}</button></div>`;
     }
     const noteCls=ex.note[0]?('ex-note '+ex.note[0]):'ex-note';
     const chips=`<span class="chip chip-${ex.stripe==='red'?'orange':ex.stripe==='purple'?'cyan':ex.stripe}">${ex.sets} Set</span>
       <span class="chip">${ex.reps}</span><span class="chip">${ex.rest}</span>${ex.star?'<span class="chip chip-star">★ Öncelik</span>':''}`;
     const mtags=ex.m.map((m,i)=>`<span class="mtag${i===0?' hl':''}">${m}</span>`).join('');
+    // geçen hafta özeti
+    const lastSummary=getLastWeekSummary(key,ex.id);
+    const prevBox=lastSummary?`<div class="prev-box">📋 Geçen kayıt: ${lastSummary}</div>`:'';
     const card=document.createElement('div');
     card.className='ex-card stripe-'+ex.stripe;
     card.innerHTML=`<div class="ex-row" onclick="this.closest('.ex-card').classList.toggle('open')">
@@ -636,12 +656,49 @@ function renderDay(key,containerId){
         <div class="dstat"><span class="dv">${ex.rest.replace(' sn','')}sn</span><span class="dl">Dinlenme</span></div>
         <div class="dstat"><span class="dv" style="font-size:13px">${weightLabel(ex).replace(' kg','')}</span><span class="dl">Ağırlık</span></div>
       </div>
-      <div class="set-logger"><div class="sl-title">Set Takibi</div><div class="sl-rows">${logRows}</div></div>
+      ${prevBox}
+      <div class="set-logger"><div class="sl-title">Set Takibi (otomatik kaydedilir)</div><div class="sl-rows">${logRows}</div></div>
       <div class="${noteCls}">${ex.note[1]}</div>
       <div class="mtags">${mtags}</div>
     </div>`;
     cont.appendChild(card);
   });
+}
+
+// ── KALICI KAYIT (localStorage) ──
+const STORE_PREFIX='vtaper_';
+function saveVal(input){
+  const k=input.getAttribute('data-save');
+  try{
+    if(input.value===''){localStorage.removeItem(STORE_PREFIX+k);}
+    else{localStorage.setItem(STORE_PREFIX+k,input.value);}
+  }catch(e){}
+}
+function loadVal(k){
+  try{return localStorage.getItem(STORE_PREFIX+k)||'';}catch(e){return '';}
+}
+// Geçen haftanın (currentWeek-1) aynı setinin değerini placeholder hint olarak getir
+function getPrevHint(dayKey,exId,setNum){
+  if(currentWeek<=1)return {kg:'',rep:''};
+  const pw=currentWeek-1;
+  const kg=loadValRaw(`w${pw}_${dayKey}_${exId}_s${setNum}_kg`);
+  const rep=loadValRaw(`w${pw}_${dayKey}_${exId}_s${setNum}_rep`);
+  return {kg:kg?('→'+kg):'', rep:rep?('→'+rep):''};
+}
+function loadValRaw(k){try{return localStorage.getItem(STORE_PREFIX+k)||'';}catch(e){return '';}}
+// Bir egzersizin geçen hafta tüm setlerinin özeti ("32.5kg×10, 32.5kg×9...")
+function getLastWeekSummary(dayKey,exId){
+  // önce bu haftadan bir önceki dolu haftayı bul
+  for(let pw=currentWeek-1;pw>=1;pw--){
+    let parts=[];
+    for(let s=1;s<=6;s++){
+      const kg=loadValRaw(`w${pw}_${dayKey}_${exId}_s${s}_kg`);
+      const rep=loadValRaw(`w${pw}_${dayKey}_${exId}_s${s}_rep`);
+      if(kg||rep){parts.push((kg||'?')+'kg×'+(rep||'?'));}
+    }
+    if(parts.length){return 'H'+pw+' · '+parts.join(', ');}
+  }
+  return '';
 }
 
 function renderAll(){
@@ -651,7 +708,13 @@ function renderAll(){
   renderDay('pull','ex-pull');
 }
 
-function toggleCheck(btn){btn.classList.toggle('done');btn.textContent=btn.classList.contains('done')?'✓':'○';}
+function toggleCheck(btn){
+  btn.classList.toggle('done');
+  const done=btn.classList.contains('done');
+  btn.textContent=done?'✓':'○';
+  const k=btn.getAttribute('data-chk');
+  if(k){try{done?localStorage.setItem(STORE_PREFIX+k,'1'):localStorage.removeItem(STORE_PREFIX+k);}catch(e){}}
+}
 function switchDay(i){document.querySelectorAll('.panel').forEach((p,j)=>p.classList.toggle('active',i===j));document.querySelectorAll('.day-btn').forEach((b,j)=>b.classList.toggle('active',i===j));window.scrollTo({top:0,behavior:'smooth'});}
 function switchInfo(i,btn){document.querySelectorAll('.ipanel').forEach((p,j)=>p.classList.toggle('active',i===j));document.querySelectorAll('.itab').forEach(b=>b.classList.remove('active'));btn.classList.add('active');}
 
@@ -673,6 +736,34 @@ function buildProgressTable(){
     d.innerHTML=r.map((c,ci)=>`<div class="${ci===0&&ri>0?'prog-wk':''}">${c}</div>`).join('');
     t.appendChild(d);
   });
+}
+
+function exportData(){
+  let lines=[];
+  try{
+    for(let i=0;i<localStorage.length;i++){
+      const k=localStorage.key(i);
+      if(k&&k.startsWith(STORE_PREFIX)){lines.push(k.replace(STORE_PREFIX,'')+'='+localStorage.getItem(k));}
+    }
+  }catch(e){}
+  if(!lines.length){alert('Henüz kayıt yok.');return;}
+  const text=lines.join('\n');
+  if(navigator.clipboard&&navigator.clipboard.writeText){
+    navigator.clipboard.writeText(text).then(()=>alert('✅ '+lines.length+' kayıt panoya kopyalandı! Notlar uygulamasına yapıştırıp saklayabilirsin.')).catch(()=>prompt('Kayıtların (kopyala):',text));
+  }else{prompt('Kayıtların (kopyala):',text);}
+}
+function clearWeekData(){
+  if(!confirm('Hafta '+currentWeek+' kayıtların silinecek. Emin misin?'))return;
+  try{
+    const toDel=[];
+    for(let i=0;i<localStorage.length;i++){
+      const k=localStorage.key(i);
+      if(k&&k.startsWith(STORE_PREFIX+'w'+currentWeek+'_')){toDel.push(k);}
+    }
+    toDel.forEach(k=>localStorage.removeItem(k));
+    renderAll();
+    alert('✅ Hafta '+currentWeek+' temizlendi.');
+  }catch(e){alert('Hata oluştu.');}
 }
 
 document.addEventListener('DOMContentLoaded',()=>{
